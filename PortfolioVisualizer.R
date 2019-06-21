@@ -6,11 +6,13 @@ library(fields)
 
 # Load & transforma data from stocks, [Country, Amount]
 stocks <- read.csv("stocks.csv", fileEncoding = "UTF-8-BOM")
+
+# Make needed variables
 stocks <- stocks %>%
   arrange(Amount) %>%
-  mutate(Country = factor(.$Country, levels = .$Country)) %>% 
-  mutate(dummy = "ETF") %>% 
-  mutate(Amount = .$Amount / sum(Amount)) %>% 
+  mutate(Country = factor(Country, levels = Country)) %>%
+  mutate(ETF = "ETF") %>%
+  mutate(Amount = Amount / sum(Amount)) %>%
   mutate(Percent = percent(Amount))
 
 # Function for defining colors used in the graph
@@ -19,8 +21,14 @@ heatColors <- function(n, alpha = 1) {
 }
 
 # Plot a stacked bar chart
-ggplot(stocks, aes(x = dummy, y = Amount, fill = Country, label = paste(Country, Percent))) +
+ggplot(stocks, aes(x = ETF,
+                   y = Amount,
+                   fill = Country,
+                   label = paste(Country, Percent))) +
+  geom_col() +
+  xlab("") +
+  ylab("") +
+  ggtitle("") +
   scale_y_continuous(labels = percent_format()) +
-  geom_col() + xlab("") + ylab("") + ggtitle("") +
   scale_fill_manual(values = heatColors(nrow(stocks)), name = "Country or sector") +
-  geom_text(size = 3, position = position_stack(vjust = 0.5), check_overlap = T)
+  geom_text(size = 3, position = position_stack(vjust = 0.5), check_overlap = TRUE)
