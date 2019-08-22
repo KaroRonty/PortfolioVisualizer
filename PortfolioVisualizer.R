@@ -4,10 +4,10 @@ library(scales)
 library(RColorBrewer)
 library(fields)
 
-# Load & transforma data from stocks, [Country, Amount]
-stocks <- read.csv("stocks.csv", fileEncoding = "UTF-8-BOM")
+# Load & transform data from stocks, [Country, Amount]
+stocks <- read.csv("stocks.csv")
 
-# Make needed variables
+# Make required variables
 stocks <- stocks %>%
   arrange(Amount) %>%
   mutate(Country = factor(Country, levels = Country)) %>%
